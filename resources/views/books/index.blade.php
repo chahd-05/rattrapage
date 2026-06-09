@@ -15,3 +15,9 @@
         </form>
     </p>
 @endforeach
+
+<form method="POST" action="/reservations">
+    @csrf
+    <input type="hidden" name="book_id" value="{{ $book->id }}">
+    <button>Reserve</button>
+</form>
