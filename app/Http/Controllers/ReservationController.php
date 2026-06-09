@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Loan;
 use App\Models\Reservation;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
@@ -27,15 +29,24 @@ public function index()
 
 public function approve(Reservation $reservation)
 {
+    
     $reservation->update([
         'status' => 'approved'
+    ]);
+
+    
+    Loan::create([
+        'user_id' => $reservation->user_id,
+        'book_id' => $reservation->book_id,
+        'borrowed_at' => Carbon::now(),
+        'status' => 'ongoing'
     ]);
 
     $reservation->book->update([
         'status' => 'borrowed'
     ]);
 
-    return back();
+    return back()->with('success', 'Reservation approved and loan created');
 }
 
 public function reject(Reservation $reservation)
