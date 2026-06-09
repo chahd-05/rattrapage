@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\BookController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\LoanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,37 +16,34 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-Route::middleware(['auth', 'is_admin'])->group(function () {
-    Route::get('/admin', function () {
-        return "Admin dashboard";
-    });
-});
-
-Route::middleware(['auth', 'is_admin'])->group(function () {
-    Route::resource('books', BookController::class);
-});
-
-Route::middleware('auth')->group(function () {
 
     Route::post('/reservations', [ReservationController::class, 'store']);
 
+    Route::get('/my-loans', function () {
+        $loans = auth()->user()->loans()->with('book')->get();
+        return view('loans.index', compact('loans'));
+    });
+
 });
 
 Route::middleware(['auth', 'is_admin'])->group(function () {
+
+    Route::get('/admin', function () {
+        return view('admin.dashboard');
+    });
+
+    Route::resource('books', BookController::class);
 
     Route::get('/reservations', [ReservationController::class, 'index']);
     Route::post('/reservations/{reservation}/approve', [ReservationController::class, 'approve']);
     Route::post('/reservations/{reservation}/reject', [ReservationController::class, 'reject']);
 
+    Route::post('/loans/{loan}/return', [LoanController::class, 'returnBook']);
+
 });
 
-Route::get('/my-loans', function () {
-    $loans = auth()->user()->loans()->with('book')->get();
-    return view('loans.index', compact('loans'));
-});
 require __DIR__.'/auth.php';
