@@ -43,4 +43,8 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 
 });
 
+Route::get('/my-loans', function () {
+    $loans = auth()->user()->loans()->with('book')->get();
+    return view('loans.index', compact('loans'));
+});
 require __DIR__.'/auth.php';
