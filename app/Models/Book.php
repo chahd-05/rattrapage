@@ -13,8 +13,15 @@ class Book extends Model
         'description',
         'status'
     ];
-    public function reservations()
+    
+public function reservations()
 {
     return $this->hasMany(Reservation::class);
 }
+
+public function loans()
+{
+    return $this->hasMany(Loan::class);
+}
+
 }
