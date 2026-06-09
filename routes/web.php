@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,6 +27,20 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 
 Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::resource('books', BookController::class);
+});
+
+Route::middleware('auth')->group(function () {
+
+    Route::post('/reservations', [ReservationController::class, 'store']);
+
+});
+
+Route::middleware(['auth', 'is_admin'])->group(function () {
+
+    Route::get('/reservations', [ReservationController::class, 'index']);
+    Route::post('/reservations/{reservation}/approve', [ReservationController::class, 'approve']);
+    Route::post('/reservations/{reservation}/reject', [ReservationController::class, 'reject']);
+
 });
 
 require __DIR__.'/auth.php';
