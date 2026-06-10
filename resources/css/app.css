@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        --primary-dark: #5a4a3a;
+        --primary-light: #8b7355;
+        --accent-gold: #d4a574;
+        --accent-cream: #f5f0e8;
+        --text-dark: #3d2817;
+    }
+}
+
+@layer components {
+    .library-card {
+        @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300;
+    }
+
+    .library-stat-card {
+        @apply bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg p-6 shadow-md border border-amber-100;
+    }
+
+    .library-btn-primary {
+        @apply bg-amber-700 hover:bg-amber-800 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    }
+
+    .library-btn-secondary {
+        @apply bg-amber-100 hover:bg-amber-200 text-amber-900 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    }
+
+    .library-heading {
+        @apply text-amber-900 font-serif font-bold;
+    }
+
+    .library-section-title {
+        @apply text-xl font-serif text-amber-900 mb-6 pb-3 border-b-2 border-amber-200;
+    }
+
+    .library-input {
+        @apply w-full px-4 py-2 rounded-lg border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-transparent bg-amber-50;
+    }
+
+    .library-book-item {
+        @apply library-card p-4 mb-3 flex items-start justify-between gap-4;
+    }
+}

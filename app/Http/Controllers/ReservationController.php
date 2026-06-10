@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
+    public function index()
+    {
+        $reservations = Reservation::with(['user', 'book'])->get();
+        return view('reservations.index', compact('reservations'));
+    }
+
     public function store(Request $request)
 {
     $userId = auth()->id();
